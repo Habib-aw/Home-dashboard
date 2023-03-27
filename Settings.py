@@ -42,5 +42,5 @@ otherPrayerLabelsPaddingX = 0
 
 
 hourWeatherCheckInterval = 10 #min
-adhaanCheckInterval = 0.9 # sec
+adhaanCheckInterval = 1 # sec
 prayerPassedCheckInterval =1 # min

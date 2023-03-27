@@ -29,9 +29,11 @@ class Prayers:
         self.salahsToDate()
         self.showPrayers()
         self.checkPrayerPassed()
-
+        self.adhaanAnnounce = False
+        self.startAnnounceIndex= 0
+        self.salahAnnounceIndex = 0
+        self.salahAnnounce = False
         schedule.every(adhaanCheckInterval).seconds.do(self.announceAdhaanAndSalah)
-        schedule.every(prayerPassedCheckInterval).minutes.do(self.checkPrayerPassed)
     def salahsToDate(self):
         for i in range(1,len(self.prayers)-2):
             for j in range(1,len(self.prayers[0])):
@@ -73,9 +75,19 @@ class Prayers:
                 self.prayerLabels[i][0].config(background="red")
     def announceAdhaanAndSalah(self):
         for i in range(len(self.prayerTimeObj)):
-            if(datetime.now() == self.prayerTimeObj[i][0]):
+            if(datetime.now() >= self.prayerTimeObj[i][0] and datetime.now() <(self.prayerTimeObj[i][0]+timedelta(minutes=1))) and not self.adhaanAnnounce:
+                self.adhaanAnnounce = True
+                self.startAnnounceIndex = i
+                self.checkPrayerPassed()
                 Thread(target=playNoise,args=("adhaan",)).start()
-            if(datetime.now() == (self.prayerTimeObj[i][0] - timedelta(minutes=minsBeforeSalah))):
+                break
+            if(datetime.now() >= (self.prayerTimeObj[i][1] - timedelta(minutes=minsBeforeSalah)) and datetime.now() <(self.prayerTimeObj[i][1]-timedelta(minutes=(minsBeforeSalah-1))) and not self.salahAnnounce):
+                self.salahAnnounce = True
+                self.salahAnnounceIndex = i
+                self.checkPrayerPassed()
                 Thread(target=playNoise,args=("salah",)).start()
-
-    
+                break
+        if not (datetime.now() >= self.prayerTimeObj[self.startAnnounceIndex][0] and datetime.now() <(self.prayerTimeObj[self.startAnnounceIndex][0]+timedelta(minutes=1))):
+            self.adhaanAnnounce = False
+        if not (datetime.now() >= (self.prayerTimeObj[self.salahAnnounceIndex][1] - timedelta(minutes=minsBeforeSalah)) and datetime.now() <(self.prayerTimeObj[self.salahAnnounceIndex][1]-timedelta(minutes=(minsBeforeSalah-1)))):
+            self.salahAnnounce = False
