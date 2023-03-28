@@ -25,7 +25,8 @@ hourlyWeatherIconWidth= 50
 hourlyWeatherIconHeight= 50
 dailyWeatherIconHeight= 50
 dailyWeatherIconWidth= 50
-hourlyWeatherFontSize = 15
+hourlyWeatherDataFontSize = 20
+hourlyWeatherHeadingFontSize = 15
 dailyDayFontSize = 15
 dailyTempFontSize = 25
 
@@ -44,3 +45,8 @@ otherPrayerLabelsPaddingX = 0
 hourWeatherCheckInterval = 10 #min
 adhaanCheckInterval = 1 # sec
 prayerPassedCheckInterval =1 # min
+
+frame1PadY = 0
+frame2PadY = 0
+frame3PadY = 0
+frame4PadY = 0

@@ -7,7 +7,7 @@ from PIL import ImageTk,Image
 from datetime import datetime
 import platform
 import schedule
-from Settings import frame3BgColor,dailyDayFontSize,dailyTempFontSize,dailyWeatherIconHeight,dailyWeatherIconWidth,hourlyWeatherFontSize,hourlyWeatherIconHeight,hourlyWeatherIconWidth,numOfWeatherHours,forecastsPaddingX,hourlyWeatherPaddingX,hourWeatherCheckInterval
+from Settings import frame3BgColor,dailyDayFontSize,dailyTempFontSize,dailyWeatherIconHeight,dailyWeatherIconWidth,hourlyWeatherDataFontSize,hourlyWeatherIconHeight,hourlyWeatherIconWidth,numOfWeatherHours,forecastsPaddingX,hourlyWeatherPaddingX,hourlyWeatherHeadingFontSize
 
 
 def celsiusConvert(kelvin):
@@ -43,7 +43,6 @@ class Weather:
             for j in range(width):
                 if j ==1 and i>0 :
                     img = ImageTk.PhotoImage(Image.open(self.hourlyWeather[j][i]).resize((hourlyWeatherIconWidth,hourlyWeatherIconHeight),Image.ANTIALIAS))
-                    x = Label(self.frame)
                     self.hourlyWeatherLabels[j][i].config(image=img)
                     self.hourlyWeatherLabels[j][i].image = img
                 else:
@@ -76,12 +75,16 @@ class Weather:
         width = len(self.hourlyWeather)
         for i in range(height): 
             for j in range(width):
+                if i==0:
+                    font = hourlyWeatherHeadingFontSize
+                else:
+                    font = hourlyWeatherDataFontSize
                 if j ==1 and i>0 :
                     img = ImageTk.PhotoImage(Image.open(self.hourlyWeather[j][i]).resize((hourlyWeatherIconWidth,hourlyWeatherIconHeight),Image.ANTIALIAS))
                     self.hourlyWeatherLabels[j][i] = Label(self.frame,image=img,background=frame3BgColor)
                     self.hourlyWeatherLabels[j][i].image = img
                 else:
-                    self.hourlyWeatherLabels[j][i] = Label(self.frame, text=self.hourlyWeather[j][i],background=frame3BgColor,font=("Arial",hourlyWeatherFontSize),foreground="white")
+                    self.hourlyWeatherLabels[j][i] = Label(self.frame, text=self.hourlyWeather[j][i],background=frame3BgColor,font=("Arial",font),foreground="white")
                 self.hourlyWeatherLabels[j][i].grid(row=i, column=j,ipadx=hourlyWeatherPaddingX)
 
     def setForecasts(self):
