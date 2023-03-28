@@ -47,7 +47,7 @@ hourWeatherCheckInterval = 10 #min
 adhaanCheckInterval = 1 # sec
 prayerPassedCheckInterval =1 # min
 
-frame1PadY = 0
-frame2PadY = 20
+frame1PadY = 15
+frame2PadY = 0
 frame3PadY = 0
 frame4PadY = 0

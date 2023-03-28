@@ -24,7 +24,7 @@ frame3.pack(ipady=frame4PadY,side="bottom")
 
 Label(frame2,text="Notes",font=("Arial",notesTitleFontSize),background=frame4BgColor,foreground="white").pack()
 if today.strftime("%A") =="Friday":
-    Label(frame2,text="Bid for house",font=("Arial",notesTextFontSize)).pack()
+    Label(frame2,text="- Bid for house",font=("Arial",notesTextFontSize),background=frame2BgColor,foreground="white").pack()
 Label(frame4,text=today.strftime('%A, %d %B %Y'),font=("Arial",dateFontSize),background=frame4BgColor,foreground="white").pack(side="bottom")
 clock = Label(frame4,text=today.strftime('%I:%M:%S %p'),font=("Arial",clockFontSize),background=frame4BgColor,foreground="white")
 clock.pack(side="bottom")
