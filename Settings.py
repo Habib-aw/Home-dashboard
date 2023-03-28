@@ -19,24 +19,24 @@ month= today.month-1
 day = today.day-1
 year = today.year
 minsBeforeSalah = 25
-prayerFontSize = 30
+prayerFontSize = 50
 
-hourlyWeatherIconWidth= 50
-hourlyWeatherIconHeight= 50
-dailyWeatherIconHeight= 50
-dailyWeatherIconWidth= 50
-hourlyWeatherDataFontSize = 20
-hourlyWeatherHeadingFontSize = 15
-dailyDayFontSize = 15
+hourlyWeatherIconWidth= 75
+hourlyWeatherIconHeight= 75
+dailyWeatherIconHeight= 75
+dailyWeatherIconWidth= 75
+hourlyWeatherDataFontSize = 30
+hourlyWeatherHeadingFontSize = 20
+dailyDayFontSize = 20
 dailyTempFontSize = 25
 
 notesTitleFontSize = 53
 notesTextFontSize = 30
 dateFontSize = 53
 clockFontSize = 53
-numOfWeatherHours = 7
+numOfWeatherHours = 8
 
-hourlyWeatherPaddingX=0
+hourlyWeatherPaddingX=10
 forecastsPaddingX=0
 prayerLabelsPaddingX = 36
 otherPrayerLabelsPaddingX = 0
@@ -47,6 +47,6 @@ adhaanCheckInterval = 1 # sec
 prayerPassedCheckInterval =1 # min
 
 frame1PadY = 0
-frame2PadY = 0
+frame2PadY = 20
 frame3PadY = 0
 frame4PadY = 0
