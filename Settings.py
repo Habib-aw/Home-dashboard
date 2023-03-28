@@ -20,6 +20,7 @@ day = today.day-1
 year = today.year
 minsBeforeSalah = 25
 prayerFontSize = 50
+mithlFontSize = 25
 
 hourlyWeatherIconWidth= 75
 hourlyWeatherIconHeight= 75
