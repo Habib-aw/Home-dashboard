@@ -18,7 +18,7 @@ today = datetime.today()
 month= today.month-1
 day = today.day-1
 year = today.year
-minsBeforeSalah = 25
+minsBeforeSalah = 15
 prayerFontSize = 50
 mithlFontSize = 25
 

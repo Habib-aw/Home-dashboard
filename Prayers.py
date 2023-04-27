@@ -92,9 +92,9 @@ class Prayers:
         for i in range(len(self.prayerTimeObj)):
             if (self.prayerTimeObj[i][0]<datetime.now()):
                 self.prayerLabels[i][0].config(background="green")
-            if (self.prayerTimeObj[i][1]<datetime.now()):
+            if (self.prayerTimeObj[i][1]<=datetime.now()):
                 self.prayerLabels[i][1].config(background="red")
-            if datetime.now()<self.prayerTimeObj[i][1] and not setJamaah:
+            if datetime.now()<=self.prayerTimeObj[i][1] and not setJamaah:
                 self.prayerLabels[i][1].config(background="green")
                 setJamaah=True
         for i in range(len(self.prayerTimeObj)):
@@ -117,9 +117,10 @@ class Prayers:
             if(datetime.now() >= (self.prayerTimeObj[i][1] - timedelta(minutes=minsBeforeSalah)) and datetime.now() <(self.prayerTimeObj[i][1]-timedelta(minutes=(minsBeforeSalah-1))) and not self.salahAnnounce):
                 self.salahAnnounce = True
                 self.salahAnnounceIndex = i
-                self.checkPrayerPassed()
                 Thread(target=playNoise,args=("salah",)).start()
                 break
+            if(datetime.now() >= (self.prayerTimeObj[i][1]) and datetime.now() <(self.prayerTimeObj[i][1]+timedelta(minutes=1))):
+                self.checkPrayerPassed()
         if not (datetime.now() >= self.prayerTimeObj[self.startAnnounceIndex][0] and datetime.now() <(self.prayerTimeObj[self.startAnnounceIndex][0]+timedelta(minutes=1))):
             self.adhaanAnnounce = False
         if not (datetime.now() >= (self.prayerTimeObj[self.salahAnnounceIndex][1] - timedelta(minutes=minsBeforeSalah)) and datetime.now() <(self.prayerTimeObj[self.salahAnnounceIndex][1]-timedelta(minutes=(minsBeforeSalah-1)))):
