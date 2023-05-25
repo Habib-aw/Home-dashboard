@@ -95,7 +95,7 @@ class Prayers:
             if (self.prayerTimeObj[i][1]<=datetime.now()):
                 self.prayerLabels[i][1].config(background="red")
             if datetime.now()<=self.prayerTimeObj[i][1] and not setJamaah:
-                self.prayerLabels[i][1].config(background="green")
+                self.prayerLabels[i][1].config(background="orange")
                 setJamaah=True
         for i in range(len(self.prayerTimeObj)):
             if i == len(self.prayerTimeObj)-1:
