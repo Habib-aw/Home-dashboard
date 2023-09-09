@@ -7,23 +7,37 @@ from datetime import datetime,timedelta
 from audioplayer import AudioPlayer
 from threading import Thread
 import schedule
+import requests
 
 def playNoise(soundFile):
     AudioPlayer("Sounds/"+soundFile+".mp3").play(block=True)
 class Prayers:
     def __init__(self,frame):
         self.frame = frame
-        self.data = json.load(open(str(today.year)+".json"))
-        self.prayers = [
-            ["","Start","Jama'ah"],
-            ["Fajr",self.data[month][day]['Fajr_start'],self.data[month][day]['Fajr_jamaah']],
-            ["Zuhr",self.data[month][day]['Zuhr_start'],self.data[month][day]['Zuhr_jamaah']],
-            ["Asr",self.data[month][day]['Asr_start2'],self.data[month][day]['Asr_jamaah']],
-            ["Maghrib",self.data[month][day]['Maghrib_start'],self.data[month][day]['Maghrib_jamaah']],
-            ["Isha",self.data[month][day]['Isha_start'],self.data[month][day]['Isha_jamaah']],
-            ["","First","Second"],
-            ["Jummah",firstJammah,secondJammah]
-        ]
+        try:
+            res = requests.get('https://data.baitulmamur.academy/')
+            self.data = json.loads(res.text)
+            self.prayers = [
+                ["","Start","Jama'ah"],
+                ["Fajr",self.data[month][day]['Fajr_start'],self.data[month][day]['Fajr_jamaah']],
+                ["Zuhr",self.data[month][day]['Zuhr_start'],self.data[month][day]['Zuhr_jamaah']],
+                ["Asr",self.data[month][day]['Asr_start2'],self.data[month][day]['Asr_jamaah']],
+                ["Maghrib",self.data[month][day]['Maghrib_start'],self.data[month][day]['Maghrib_jamaah']],
+                ["Isha",self.data[month][day]['Isha_start'],self.data[month][day]['Isha_jamaah']],
+                ["","First","Second"],
+                ["Jummah",firstJammah,secondJammah]
+            ]
+        except:
+            self.prayers = [
+                ["","Start","Jama'ah"],
+                ["Fajr","",""],
+                ["Zuhr","",""],
+                ["Asr","",""],
+                ["Maghrib","",""],
+                ["Isha","",""],
+                ["","First","Second"],
+                ["Jummah",firstJammah,secondJammah]
+            ]
         self.mithl1Time = self.data[month][day]['Asr_start1']
         self.mithl1TimeObj = None
         self.mithl1Label =None
@@ -38,15 +52,16 @@ class Prayers:
         self.salahAnnounce = False
         schedule.every(adhaanCheckInterval).seconds.do(self.announceAdhaanAndSalah)
     def salahsToDate(self):
-        for i in range(1,len(self.prayers)-2):
-            for j in range(1,len(self.prayers[0])):
-                salahsSplit = self.prayers[i][j].split(":")
-                if i == 1:
-                    self.prayerTimeObj[i-1][j-1] = datetime(year,month+1,day+1,int(salahsSplit[0]),int(salahsSplit[1]))
-                else:
-                    self.prayerTimeObj[i-1][j-1] = datetime(year,month+1,day+1,int(salahsSplit[0])+12,int(salahsSplit[1]))
-        salahsSplit = self.mithl1Time.split(":")
-        self.mithl1TimeObj = datetime(year,month+1,day+1,int(salahsSplit[0])+12,int(salahsSplit[1]))
+        if self.prayers [1][1] != "":
+            for i in range(1,len(self.prayers)-2):
+                for j in range(1,len(self.prayers[0])):
+                    salahsSplit = self.prayers[i][j].split(":")
+                    if i == 1:
+                        self.prayerTimeObj[i-1][j-1] = datetime(year,month+1,day+1,int(salahsSplit[0]),int(salahsSplit[1]))
+                    else:
+                        self.prayerTimeObj[i-1][j-1] = datetime(year,month+1,day+1,int(salahsSplit[0])+12,int(salahsSplit[1]))
+            salahsSplit = self.mithl1Time.split(":")
+            self.mithl1TimeObj = datetime(year,month+1,day+1,int(salahsSplit[0])+12,int(salahsSplit[1]))
     def showPrayers(self):
         height = len(self.prayers)
         width = len(self.prayers[0])
@@ -112,7 +127,7 @@ class Prayers:
                 self.adhaanAnnounce = True
                 self.startAnnounceIndex = i
                 self.checkPrayerPassed()
-                Thread(target=playNoise,args=("adhaan",)).start()
+                Thread(target=playNoise,args=("adhaan-new",)).start()
                 break
             if(datetime.now() >= (self.prayerTimeObj[i][1] - timedelta(minutes=minsBeforeSalah)) and datetime.now() <(self.prayerTimeObj[i][1]-timedelta(minutes=(minsBeforeSalah-1))) and not self.salahAnnounce):
                 self.salahAnnounce = True
