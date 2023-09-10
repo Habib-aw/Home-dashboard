@@ -21,8 +21,9 @@ def getDay(i):
     return daysOfWeek[dayWeekIndex]
 
 class Weather:
-    def __init__(self,frame):
+    def __init__(self,frame,errorMsgLabel):
         self.data = None
+        self.errorMsgLabel = errorMsgLabel
         self.hourlyWeather = [["" for _ in range(numOfWeatherHours)] for _ in range(7)]
         self.hourlyWeatherLabels = [[None for _ in range(numOfWeatherHours)] for _ in range(7)]
         self.forecasts = [[None,None,None] for _ in range(7)]
@@ -36,33 +37,50 @@ class Weather:
         schedule.every(10).minutes.do(self.configHourlyWeather)
     def configHourlyWeather(self):
         self.getData()
-        self.setHourlyWeather()
-        height = len(self.hourlyWeather[0])
-        width = len(self.hourlyWeather)
-        for i in range(height): 
-            for j in range(width):
-                if j ==1 and i>0 :
-                    img = ImageTk.PhotoImage(Image.open(self.hourlyWeather[j][i]).resize((hourlyWeatherIconWidth,hourlyWeatherIconHeight),Image.ANTIALIAS))
-                    self.hourlyWeatherLabels[j][i].config(image=img)
-                    self.hourlyWeatherLabels[j][i].image = img
-                else:
-                    self.hourlyWeatherLabels[j][i].config(text=self.hourlyWeather[j][i])
+        if self.data != "":
+            self.setHourlyWeather()
+            height = len(self.hourlyWeather[0])
+            width = len(self.hourlyWeather)
+            for i in range(height): 
+                for j in range(width):
+                    if j ==1 and i>0 :
+                        img = ImageTk.PhotoImage(Image.open(self.hourlyWeather[j][i]).resize((hourlyWeatherIconWidth,hourlyWeatherIconHeight),Image.ANTIALIAS))
+                        self.hourlyWeatherLabels[j][i].config(image=img)
+                        self.hourlyWeatherLabels[j][i].image = img
+                    else:
+                        self.hourlyWeatherLabels[j][i].config(text=self.hourlyWeather[j][i])
+            self.setForecasts()
+            self.showForecasts()
                 
     def getData(self):
-        res = requests.get('https://api.openweathermap.org/data/2.5/onecall?lat=51&lon=0&appid=0b0d6bb2481f89c3bbec13ddfa2879bd')
-        self.data = json.loads(res.text)
+        try:
+            res = requests.get('https://api.openweathermap.org/data/2.5/onecall?lat=51&lon=0&appid=0b0d6bb2481f89c3bbec13ddfa2879bd')
+            self.data = json.loads(res.text)
+            self.errorMsgLabel.pack_forget()
+        except:
+            self.data = ""
+            self.errorMsgLabel.pack()
     def setHourlyWeather(self):
         for i in range(1,len(self.hourlyWeather[0])):
             hyphen = "-"
             if platform.system() =="Windows":
                 hyphen="#"
-            self.hourlyWeather[0][i] = datetime.utcfromtimestamp(self.data['hourly'][i]['dt']).strftime('%'+hyphen+'I%p')
-            self.hourlyWeather[1][i] =  "Images/"+self.data['hourly'][i]['weather'][0]['icon']+".png"
-            self.hourlyWeather[2][i] = celsiusConvert( self.data['hourly'][i]['temp'])
-            self.hourlyWeather[3][i] = ""+celsiusConvert( self.data['hourly'][i]['feels_like'])
-            self.hourlyWeather[4][i] = str(round(self.data['hourly'][i]['pop']*100))+"%"
-            self.hourlyWeather[5][i] =  str(self.data['hourly'][i]['uvi'])
-            self.hourlyWeather[6][i] =  str(round(self.data['hourly'][i]['wind_speed']* 2.236936))+" mph"
+            if self.data == "":
+                self.hourlyWeather[0][i] = ''
+                self.hourlyWeather[1][i] = ''
+                self.hourlyWeather[2][i] = ''
+                self.hourlyWeather[3][i] = ''
+                self.hourlyWeather[4][i] = ''
+                self.hourlyWeather[5][i] = ''
+                self.hourlyWeather[6][i] = ''
+            else:
+                self.hourlyWeather[0][i] = datetime.utcfromtimestamp(self.data['hourly'][i]['dt']).strftime('%'+hyphen+'I%p')
+                self.hourlyWeather[1][i] =  "Images/"+self.data['hourly'][i]['weather'][0]['icon']+".png"
+                self.hourlyWeather[2][i] = celsiusConvert( self.data['hourly'][i]['temp'])
+                self.hourlyWeather[3][i] = ""+celsiusConvert( self.data['hourly'][i]['feels_like'])
+                self.hourlyWeather[4][i] = str(round(self.data['hourly'][i]['pop']*100))+"%"
+                self.hourlyWeather[5][i] =  str(self.data['hourly'][i]['uvi'])
+                self.hourlyWeather[6][i] =  str(round(self.data['hourly'][i]['wind_speed']* 2.236936))+" mph"
 
         self.hourlyWeather[2][0] = "Temperature"
         self.hourlyWeather[3][0] = "Feels like"
@@ -79,7 +97,7 @@ class Weather:
                     font = hourlyWeatherHeadingFontSize
                 else:
                     font = hourlyWeatherDataFontSize
-                if j ==1 and i>0 :
+                if j ==1 and i>0 and self.data != "":
                     img = ImageTk.PhotoImage(Image.open(self.hourlyWeather[j][i]).resize((hourlyWeatherIconWidth,hourlyWeatherIconHeight),Image.ANTIALIAS))
                     self.hourlyWeatherLabels[j][i] = Label(self.frame,image=img,background=frame3BgColor)
                     self.hourlyWeatherLabels[j][i].image = img
@@ -89,8 +107,11 @@ class Weather:
 
     def setForecasts(self):
         for i in range(len(self.forecasts)):
-            img = "Images/"+self.data['daily'][i]['weather'][0]['icon']+'.png'
-            self.forecasts[i] = [getDay(i),img,celsiusConvert(self.data['daily'][i]['temp']['day'])]
+            if self.data == "":
+                self.forecasts[i] =[getDay(i),"",""]
+            else:
+                img = "Images/"+self.data['daily'][i]['weather'][0]['icon']+'.png'
+                self.forecasts[i] = [getDay(i),img,celsiusConvert(self.data['daily'][i]['temp']['day'])]
 
 
     def showForecasts(self):
@@ -101,7 +122,7 @@ class Weather:
                     fontSize = dailyTempFontSize
                     if i == 0:
                         fontSize = dailyDayFontSize
-                    if i ==1:
+                    if i ==1 and self.data != "":
                         img =  ImageTk.PhotoImage(Image.open(self.forecasts[j][i]).resize((dailyWeatherIconWidth,dailyWeatherIconHeight),Image.ANTIALIAS))
                         x = Label(self.frame,image=img,background=frame3BgColor)
                         x.image = img

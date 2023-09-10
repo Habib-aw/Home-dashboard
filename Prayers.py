@@ -14,38 +14,13 @@ def playNoise(soundFile):
 class Prayers:
     def __init__(self,frame):
         self.frame = frame
-        try:
-            res = requests.get('https://data.baitulmamur.academy/')
-            self.data = json.loads(res.text)
-            self.prayers = [
-                ["","Start","Jama'ah"],
-                ["Fajr",self.data[month][day]['Fajr_start'],self.data[month][day]['Fajr_jamaah']],
-                ["Zuhr",self.data[month][day]['Zuhr_start'],self.data[month][day]['Zuhr_jamaah']],
-                ["Asr",self.data[month][day]['Asr_start2'],self.data[month][day]['Asr_jamaah']],
-                ["Maghrib",self.data[month][day]['Maghrib_start'],self.data[month][day]['Maghrib_jamaah']],
-                ["Isha",self.data[month][day]['Isha_start'],self.data[month][day]['Isha_jamaah']],
-                ["","First","Second"],
-                ["Jummah",firstJammah,secondJammah]
-            ]
-        except:
-            self.prayers = [
-                ["","Start","Jama'ah"],
-                ["Fajr","",""],
-                ["Zuhr","",""],
-                ["Asr","",""],
-                ["Maghrib","",""],
-                ["Isha","",""],
-                ["","First","Second"],
-                ["Jummah",firstJammah,secondJammah]
-            ]
-        self.mithl1Time = self.data[month][day]['Asr_start1']
+        self.schedulerSet = False
         self.mithl1TimeObj = None
         self.mithl1Label =None
+        self.getPrayersScheduler=None
         self.prayerTimeObj = [[None for _ in range(2)] for _ in range (5)]
         self.prayerLabels = [[None for _ in range(2)] for _ in range (5)]
-        self.salahsToDate()
-        self.showPrayers()
-        self.checkPrayerPassed()
+        self.getPrayers()
         self.adhaanAnnounce = False
         self.startAnnounceIndex= 0
         self.salahAnnounceIndex = 0
@@ -62,6 +37,41 @@ class Prayers:
                         self.prayerTimeObj[i-1][j-1] = datetime(year,month+1,day+1,int(salahsSplit[0])+12,int(salahsSplit[1]))
             salahsSplit = self.mithl1Time.split(":")
             self.mithl1TimeObj = datetime(year,month+1,day+1,int(salahsSplit[0])+12,int(salahsSplit[1]))
+    def getPrayers(self):
+        try:
+            res = requests.get('https://data.baitulmamur.academy/')
+            self.data = json.loads(res.text)
+            self.prayers = [
+                ["","Start","Jama'ah"],
+                ["Fajr",self.data[month][day]['Fajr_start'],self.data[month][day]['Fajr_jamaah']],
+                ["Zuhr",self.data[month][day]['Zuhr_start'],self.data[month][day]['Zuhr_jamaah']],
+                ["Asr",self.data[month][day]['Asr_start2'],self.data[month][day]['Asr_jamaah']],
+                ["Maghrib",self.data[month][day]['Maghrib_start'],self.data[month][day]['Maghrib_jamaah']],
+                ["Isha",self.data[month][day]['Isha_start'],self.data[month][day]['Isha_jamaah']],
+                ["","First","Second"],
+                ["Jummah",firstJammah,secondJammah]
+            ]
+            self.mithl1Time = self.data[month][day]['Asr_start1']
+            self.salahsToDate()
+            schedule.cancel_job(self.getPrayersScheduler)
+            self.schedulerSet = False
+        except Exception as e:
+            print("Error!",e)
+            self.prayers = [
+                ["","Start","Jama'ah"],
+                ["Fajr","",""],
+                ["Zuhr","",""],
+                ["Asr","",""],
+                ["Maghrib","",""],
+                ["Isha","",""],
+                ["","First","Second"],
+                ["Jummah",firstJammah,secondJammah]
+            ]
+            self.mithl1Time = ""
+            if not self.schedulerSet:
+                self.schedulerSet=True
+                self.getPrayersScheduler = schedule.every(2).minutes.do(self.getPrayers)
+        self.showPrayers()
     def showPrayers(self):
         height = len(self.prayers)
         width = len(self.prayers[0])
@@ -101,42 +111,46 @@ class Prayers:
                 else:
                     notPrayer =Label(self.frame, text=self.prayers[i][j],background=frame1BgColor,font=("Arial",prayerFontSize),foreground="white")
                     notPrayer.grid(row=i+addRow, column=j+addColumn,ipadx=otherPrayerLabelsPaddingX,columnspan=columnspan)
+        if self.prayers [1][1] != "":
+            self.checkPrayerPassed()
 
     def checkPrayerPassed(self):
-        setJamaah = False
-        for i in range(len(self.prayerTimeObj)):
-            if (self.prayerTimeObj[i][0]<datetime.now()):
-                self.prayerLabels[i][0].config(background="green")
-            if (self.prayerTimeObj[i][1]<=datetime.now()):
-                self.prayerLabels[i][1].config(background="red")
-            if datetime.now()<=self.prayerTimeObj[i][1] and not setJamaah:
-                self.prayerLabels[i][1].config(background="orange")
-                setJamaah=True
-        for i in range(len(self.prayerTimeObj)):
-            if i == len(self.prayerTimeObj)-1:
-                break
-            if(self.prayerTimeObj[i+1][0]<datetime.now()):
-                self.prayerLabels[i][0].config(background="red")
-        if datetime.now() >= self.mithl1TimeObj:
-            self.mithl1Label.config(background="green")
-        if datetime.now() >= self.prayerTimeObj[3][0]:
-            self.mithl1Label.config(background="red")
+        if self.prayers [1][1] != "":
+            setJamaah = False
+            for i in range(len(self.prayerTimeObj)):
+                if (self.prayerTimeObj[i][0]<datetime.now()):
+                    self.prayerLabels[i][0].config(background="green")
+                if (self.prayerTimeObj[i][1]<=datetime.now()):
+                    self.prayerLabels[i][1].config(background="red")
+                if datetime.now()<=self.prayerTimeObj[i][1] and not setJamaah:
+                    self.prayerLabels[i][1].config(background="orange")
+                    setJamaah=True
+            for i in range(len(self.prayerTimeObj)):
+                if i == len(self.prayerTimeObj)-1:
+                    break
+                if(self.prayerTimeObj[i+1][0]<datetime.now()):
+                    self.prayerLabels[i][0].config(background="red")
+            if datetime.now() >= self.mithl1TimeObj:
+                self.mithl1Label.config(background="green")
+            if datetime.now() >= self.prayerTimeObj[3][0]:
+                self.mithl1Label.config(background="red")
     def announceAdhaanAndSalah(self):
-        for i in range(len(self.prayerTimeObj)):
-            if(datetime.now() >= self.prayerTimeObj[i][0] and datetime.now() <(self.prayerTimeObj[i][0]+timedelta(minutes=1))) and not self.adhaanAnnounce:
-                self.adhaanAnnounce = True
-                self.startAnnounceIndex = i
-                self.checkPrayerPassed()
-                Thread(target=playNoise,args=("adhaan-new",)).start()
-                break
-            if(datetime.now() >= (self.prayerTimeObj[i][1] - timedelta(minutes=minsBeforeSalah)) and datetime.now() <(self.prayerTimeObj[i][1]-timedelta(minutes=(minsBeforeSalah-1))) and not self.salahAnnounce):
-                self.salahAnnounce = True
-                self.salahAnnounceIndex = i
-                Thread(target=playNoise,args=("salah",)).start()
-                break
-            if(datetime.now() >= (self.prayerTimeObj[i][1]) and datetime.now() <(self.prayerTimeObj[i][1]+timedelta(minutes=1))):
-                self.checkPrayerPassed()
-        if not (datetime.now() >= self.prayerTimeObj[self.startAnnounceIndex][0] and datetime.now() <(self.prayerTimeObj[self.startAnnounceIndex][0]+timedelta(minutes=1))):
-            self.adhaanAnnounce = False
-        if not (datetime.now() >= (self.prayerTimeObj[self.salahAnnounceIndex][1] - timedelta(minutes=minsBeforeSalah)) and datetime.now() <(self.prayerTimeObj[self.salahAnnounceIndex][1]-timedelta(minutes=(minsBeforeSalah-1)))):
-            self.salahAnnounce = False
+        if self.prayers [1][1] != "":
+            for i in range(len(self.prayerTimeObj)):
+                if(datetime.now() >= self.prayerTimeObj[i][0] and datetime.now() <(self.prayerTimeObj[i][0]+timedelta(minutes=1))) and not self.adhaanAnnounce:
+                    self.adhaanAnnounce = True
+                    self.startAnnounceIndex = i
+                    self.checkPrayerPassed()
+                    Thread(target=playNoise,args=("adhaan-new",)).start()
+                    break
+                if(datetime.now() >= (self.prayerTimeObj[i][1] - timedelta(minutes=minsBeforeSalah)) and datetime.now() <(self.prayerTimeObj[i][1]-timedelta(minutes=(minsBeforeSalah-1))) and not self.salahAnnounce):
+                    self.salahAnnounce = True
+                    self.salahAnnounceIndex = i
+                    Thread(target=playNoise,args=("salah",)).start()
+                    break
+                if(datetime.now() >= (self.prayerTimeObj[i][1]) and datetime.now() <(self.prayerTimeObj[i][1]+timedelta(minutes=1))):
+                    self.checkPrayerPassed()
+            if not (datetime.now() >= self.prayerTimeObj[self.startAnnounceIndex][0] and datetime.now() <(self.prayerTimeObj[self.startAnnounceIndex][0]+timedelta(minutes=1))):
+                self.adhaanAnnounce = False
+            if not (datetime.now() >= (self.prayerTimeObj[self.salahAnnounceIndex][1] - timedelta(minutes=minsBeforeSalah)) and datetime.now() <(self.prayerTimeObj[self.salahAnnounceIndex][1]-timedelta(minutes=(minsBeforeSalah-1)))):
+                self.salahAnnounce = False
