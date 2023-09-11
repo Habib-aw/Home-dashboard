@@ -141,7 +141,10 @@ class Prayers:
                     self.adhaanAnnounce = True
                     self.startAnnounceIndex = i
                     self.checkPrayerPassed()
-                    Thread(target=playNoise,args=("adhaan-new",)).start()
+                    if i ==0:
+                        Thread(target=playNoise,args=("adhaan-new",)).start()
+                    else:
+                        Thread(target=playNoise,args=("adhaan-new-long",)).start()
                     break
                 if(datetime.now() >= (self.prayerTimeObj[i][1] - timedelta(minutes=minsBeforeSalah)) and datetime.now() <(self.prayerTimeObj[i][1]-timedelta(minutes=(minsBeforeSalah-1))) and not self.salahAnnounce):
                     self.salahAnnounce = True
