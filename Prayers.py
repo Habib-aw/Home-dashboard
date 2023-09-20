@@ -31,7 +31,7 @@ class Prayers:
             for i in range(1,len(self.prayers)-2):
                 for j in range(1,len(self.prayers[0])):
                     salahsSplit = self.prayers[i][j].split(":")
-                    if i == 1:
+                    if i == 1 or (i ==2 and salahsSplit[0]=="12"):
                         self.prayerTimeObj[i-1][j-1] = datetime(year,month+1,day+1,int(salahsSplit[0]),int(salahsSplit[1]))
                     else:
                         self.prayerTimeObj[i-1][j-1] = datetime(year,month+1,day+1,int(salahsSplit[0])+12,int(salahsSplit[1]))
