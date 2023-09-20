@@ -31,12 +31,13 @@ class Prayers:
             for i in range(1,len(self.prayers)-2):
                 for j in range(1,len(self.prayers[0])):
                     salahsSplit = self.prayers[i][j].split(":")
-                    if i == 1 or (i ==2 and salahsSplit[0]=="12"):
+                    if i == 1 or (i ==2 and (salahsSplit[0]=="12" or salahsSplit[0]=="11")):
                         self.prayerTimeObj[i-1][j-1] = datetime(year,month+1,day+1,int(salahsSplit[0]),int(salahsSplit[1]))
                     else:
                         self.prayerTimeObj[i-1][j-1] = datetime(year,month+1,day+1,int(salahsSplit[0])+12,int(salahsSplit[1]))
             salahsSplit = self.mithl1Time.split(":")
             self.mithl1TimeObj = datetime(year,month+1,day+1,int(salahsSplit[0])+12,int(salahsSplit[1]))
+        print(self.prayerTimeObj)
     def getPrayers(self):
         try:
             res = requests.get('https://data.baitulmamur.academy/')
