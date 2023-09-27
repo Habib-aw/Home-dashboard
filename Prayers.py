@@ -14,6 +14,7 @@ def playNoise(soundFile):
 class Prayers:
     def __init__(self,frame):
         self.frame = frame
+        self.prayerLength = 6
         self.schedulerSet = False
         self.mithl1TimeObj = None
         self.mithl1Label =None
@@ -28,7 +29,7 @@ class Prayers:
         schedule.every(adhaanCheckInterval).seconds.do(self.announceAdhaanAndSalah)
     def salahsToDate(self):
         if self.prayers [1][1] != "":
-            for i in range(1,len(self.prayers)-2):
+            for i in range(1,self.prayerLength):
                 for j in range(1,len(self.prayers[0])):
                     salahsSplit = self.prayers[i][j].split(":")
                     if i == 1 or (i ==2 and (salahsSplit[0]=="12" or salahsSplit[0]=="11")):
@@ -37,7 +38,6 @@ class Prayers:
                         self.prayerTimeObj[i-1][j-1] = datetime(year,month+1,day+1,int(salahsSplit[0])+12,int(salahsSplit[1]))
             salahsSplit = self.mithl1Time.split(":")
             self.mithl1TimeObj = datetime(year,month+1,day+1,int(salahsSplit[0])+12,int(salahsSplit[1]))
-        print(self.prayerTimeObj)
     def getPrayers(self):
         try:
             res = requests.get('https://data.baitulmamur.academy/')
@@ -49,6 +49,7 @@ class Prayers:
                 ["Asr",self.data[month][day]['Asr_start2'],self.data[month][day]['Asr_jamaah']],
                 ["Maghrib",self.data[month][day]['Maghrib_start'],self.data[month][day]['Maghrib_jamaah']],
                 ["Isha",self.data[month][day]['Isha_start'],self.data[month][day]['Isha_jamaah']],
+                ["Sunrise",self.data[month][day]['Sunrise'],"-"],
                 ["","First","Second"],
                 ["Jummah",firstJammah,secondJammah]
             ]
@@ -65,6 +66,7 @@ class Prayers:
                 ["Asr","",""],
                 ["Maghrib","",""],
                 ["Isha","",""],
+                ["Sunrise","","-"],
                 ["","First","Second"],
                 ["Jummah",firstJammah,secondJammah]
             ]
@@ -106,7 +108,7 @@ class Prayers:
                         self.prayerLabels[i-1][j-1]= Label(self.frame, text=self.prayers[i][j],background=frame1BgColor,font=("Arial",prayerFontSize),foreground="white")
                         self.prayerLabels[i-1][j-1].grid(row=i+addRow, column=j+addColumn,ipadx=prayerLabelsPaddingX,rowspan=2)
                         
-                elif(i>0 and i<(height-2)) and j!=0:
+                elif(i>0 and i<(self.prayerLength)) and j!=0:
                     self.prayerLabels[i-1][j-1]= Label(self.frame, text=self.prayers[i][j],background=frame1BgColor,font=("Arial",prayerFontSize),foreground="white")
                     self.prayerLabels[i-1][j-1].grid(row=i+addRow, column=j+addColumn,ipadx=prayerLabelsPaddingX,columnspan=columnspan)
                 else:

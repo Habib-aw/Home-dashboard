@@ -44,7 +44,7 @@ class Weather:
             for i in range(height): 
                 for j in range(width):
                     if j ==1 and i>0 :
-                        img = ImageTk.PhotoImage(Image.open(self.hourlyWeather[j][i]).resize((hourlyWeatherIconWidth,hourlyWeatherIconHeight),Image.ANTIALIAS))
+                        img = ImageTk.PhotoImage(Image.open(self.hourlyWeather[j][i]).resize((hourlyWeatherIconWidth,hourlyWeatherIconHeight),Image.Resampling.LANCZOS))
                         self.hourlyWeatherLabels[j][i].config(image=img)
                         self.hourlyWeatherLabels[j][i].image = img
                     else:
@@ -98,7 +98,7 @@ class Weather:
                 else:
                     font = hourlyWeatherDataFontSize
                 if j ==1 and i>0 and self.data != "":
-                    img = ImageTk.PhotoImage(Image.open(self.hourlyWeather[j][i]).resize((hourlyWeatherIconWidth,hourlyWeatherIconHeight),Image.ANTIALIAS))
+                    img = ImageTk.PhotoImage(Image.open(self.hourlyWeather[j][i]).resize((hourlyWeatherIconWidth,hourlyWeatherIconHeight),Image.Resampling.LANCZOS))
                     self.hourlyWeatherLabels[j][i] = Label(self.frame,image=img,background=frame3BgColor)
                     self.hourlyWeatherLabels[j][i].image = img
                 else:
@@ -123,7 +123,7 @@ class Weather:
                     if i == 0:
                         fontSize = dailyDayFontSize
                     if i ==1 and self.data != "":
-                        img =  ImageTk.PhotoImage(Image.open(self.forecasts[j][i]).resize((dailyWeatherIconWidth,dailyWeatherIconHeight),Image.ANTIALIAS))
+                        img =  ImageTk.PhotoImage(Image.open(self.forecasts[j][i]).resize((dailyWeatherIconWidth,dailyWeatherIconHeight),Image.Resampling.LANCZOS))
                         x = Label(self.frame,image=img,background=frame3BgColor)
                         x.image = img
                         
