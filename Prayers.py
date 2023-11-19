@@ -40,8 +40,9 @@ class Prayers:
             self.mithl1TimeObj = datetime(year,month+1,day+1,int(salahsSplit[0])+12,int(salahsSplit[1]))
     def getPrayers(self):
         try:
-            res = requests.get('https://data.baitulmamur.academy/')
-            self.data = json.loads(res.text)
+            # res = requests.get('https://data.baitulmamur.academy/')
+            # self.data = json.loads(res.text)
+            self.data = json.load(open(str(today.year)+".json"))
             self.prayers = [
                 ["","Start","Jama'ah"],
                 ["Fajr",self.data[month][day]['Fajr_start'],self.data[month][day]['Fajr_jamaah']],
