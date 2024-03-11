@@ -15,10 +15,10 @@ frame3 = Frame(root,background=frame3BgColor)
 frame4 = Frame(root,background=frame4BgColor)
 
 
-# frame1.pack(ipady=frame1PadY)
+frame1.pack(ipady=frame1PadY)
 frame2.pack(ipady=frame2PadY)
-# frame4.pack(ipady=frame3PadY,side="bottom")
-# frame3.pack(ipady=frame4PadY,side="bottom")
+frame4.pack(ipady=frame3PadY,side="bottom")
+frame3.pack(ipady=frame4PadY,side="bottom")
 
 
 
@@ -27,14 +27,18 @@ r = Ramadan()
 dayFrame = Frame(frame2,background=frame2BgColor)
 sehriFrame = Frame(frame2,background=frame2BgColor)
 iftaarFrame=Frame(frame2,background=frame2BgColor)
-dayLabel = Label(dayFrame,text="Ramadan Day",background=frame2BgColor,foreground="white")
-day = Label(dayFrame,text=r.getRamadanDay(),font=("Arial",30),background=frame2BgColor,foreground="white")
 
-sehriLabel = Label(sehriFrame,text="Sehri Ends",background=frame2BgColor,foreground="white")
-sehri = Label(sehriFrame,text=r.todaySehri,font=("Arial",30),background=frame2BgColor,foreground="white")
+labelFont = 20
+dataFont = 50
 
-iftaarLabel = Label(iftaarFrame,text="Iftaar Starts",background=frame2BgColor,foreground="white")
-iftaar = Label(iftaarFrame,text=r.todayIftaar,font=("Arial",30),background=frame2BgColor,foreground="white")
+dayLabel = Label(dayFrame,text="Ramadan Day",font=("Arial",labelFont),background=frame2BgColor,foreground="white")
+day = Label(dayFrame,text=r.getRamadanDay(),font=("Arial",dataFont),background=frame2BgColor,foreground="white")
+
+sehriLabel = Label(sehriFrame,text="Sehri Ends",font=("Arial",labelFont),background=frame2BgColor,foreground="white")
+sehri = Label(sehriFrame,text=r.todaySehri,font=("Arial",dataFont),background=frame2BgColor,foreground="white")
+
+iftaarLabel = Label(iftaarFrame,text="Iftaar Starts",font=("Arial",labelFont),background=frame2BgColor,foreground="white")
+iftaar = Label(iftaarFrame,text=r.todayIftaar,font=("Arial",dataFont),background=frame2BgColor,foreground="white")
 
 
 dayLabel.pack()
