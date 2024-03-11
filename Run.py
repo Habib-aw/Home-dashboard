@@ -16,7 +16,7 @@ frame4 = Frame(root,background=frame4BgColor)
 
 
 frame1.pack(ipady=frame1PadY)
-frame2.pack(ipady=frame2PadY)
+frame2.pack(ipady=frame2PadY,fill="x")
 frame4.pack(ipady=frame3PadY,side="bottom")
 frame3.pack(ipady=frame4PadY,side="bottom")
 
@@ -28,8 +28,8 @@ dayFrame = Frame(frame2,background=frame2BgColor)
 sehriFrame = Frame(frame2,background=frame2BgColor)
 iftaarFrame=Frame(frame2,background=frame2BgColor)
 
-labelFont = 20
-dataFont = 50
+labelFont = 30
+dataFont = 70
 
 dayLabel = Label(dayFrame,text="Ramadan Day",font=("Arial",labelFont),background=frame2BgColor,foreground="white")
 day = Label(dayFrame,text=r.getRamadanDay(),font=("Arial",dataFont),background=frame2BgColor,foreground="white")
@@ -48,9 +48,9 @@ sehri.pack()
 iftaarLabel.pack()
 iftaar.pack()
 
-dayFrame.pack(side="left")
-sehriFrame.pack(side="left")
-iftaarFrame.pack(side="right")
+dayFrame.pack(side="left",fill="x",expand=1)
+sehriFrame.pack(side="left",fill="x",expand=1)
+iftaarFrame.pack(side="right",fill="x",expand=1)
 
 p = Prayers(frame1,r.tmrroSehri,sehri,r.tmrroIftaar,iftaar)
 # Label(frame2,text="Notes",font=("Arial",notesTitleFontSize),background=frame4BgColor,foreground="white").pack(side='top')
