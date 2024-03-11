@@ -12,7 +12,11 @@ import requests
 def playNoise(soundFile):
     AudioPlayer("Sounds/"+soundFile+".mp3").play(block=True)
 class Prayers:
-    def __init__(self,frame):
+    def __init__(self,frame,sehriText,sehriLabel,iftaarText,iftaarLabel):
+        self.sehriText = sehriText
+        self.sehriLabel = sehriLabel
+        self.iftaarText = iftaarText
+        self.iftaarLabel = iftaarLabel
         self.frame = frame
         self.prayerLength = 6
         self.schedulerSet = False
@@ -124,6 +128,10 @@ class Prayers:
             for i in range(len(self.prayerTimeObj)):
                 if (self.prayerTimeObj[i][0]<datetime.now()):
                     self.prayerLabels[i][0].config(background="green")
+                    if i == 0:
+                        self.sehriLabel.config(text=self.sehriText)
+                    if i == 3:
+                        self.iftaarLabel.config(text=self.iftaarText)
                 if (self.prayerTimeObj[i][1]<=datetime.now()):
                     self.prayerLabels[i][1].config(background="red")
                 if datetime.now()<=self.prayerTimeObj[i][1] and not setJamaah:
@@ -147,6 +155,8 @@ class Prayers:
                     self.checkPrayerPassed()
                     if i ==0:
                         Thread(target=playNoise,args=("adhaan-new",)).start()
+                    elif i == 3:
+                        Thread(target=playNoise,args=("adhaan-new-full",)).start()
                     else:
                         Thread(target=playNoise,args=("adhaan-new-long",)).start()
                     break
