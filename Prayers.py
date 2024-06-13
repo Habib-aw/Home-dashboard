@@ -8,8 +8,10 @@ from audioplayer import AudioPlayer
 from threading import Thread
 import schedule
 import requests
+import cec
 
 def playNoise(soundFile):
+    switch_hdmi(2)
     AudioPlayer("Sounds/"+soundFile+".mp3").play(block=True)
 class Prayers:
     def __init__(self,frame):
