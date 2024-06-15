@@ -8,7 +8,7 @@ from audioplayer import AudioPlayer
 from threading import Thread
 import schedule
 import requests
-import cec
+from cec import *
 
 def playNoise(soundFile):
     switch_hdmi(2)
