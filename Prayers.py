@@ -10,8 +10,9 @@ import schedule
 import requests
 from cec import *
 
-def playNoise(soundFile):
-    switch_hdmi(2)
+def playNoise(soundFile,play=True):
+    if play:
+        switch_hdmi(2)
     AudioPlayer("Sounds/"+soundFile+".mp3").play(block=True)
 class Prayers:
     def __init__(self,frame):
@@ -155,7 +156,7 @@ class Prayers:
                 if(datetime.now() >= (self.prayerTimeObj[i][1] - timedelta(minutes=minsBeforeSalah)) and datetime.now() <(self.prayerTimeObj[i][1]-timedelta(minutes=(minsBeforeSalah-1))) and not self.salahAnnounce):
                     self.salahAnnounce = True
                     self.salahAnnounceIndex = i
-                    Thread(target=playNoise,args=("salah",)).start()
+                    Thread(target=playNoise,args=("salah",False,)).start()
                     break
                 if(datetime.now() >= (self.prayerTimeObj[i][1]) and datetime.now() <(self.prayerTimeObj[i][1]+timedelta(minutes=1))):
                     self.checkPrayerPassed()
