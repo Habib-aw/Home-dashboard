@@ -24,7 +24,10 @@ frame3.pack(ipady=frame4PadY,side="bottom")
 errorMsgLabel = Label(frame2,text="Error, no internet connection",font=("Arial",notesTextFontSize+10),background=frame2BgColor,foreground="red")
 p = Prayers(frame1)
 Label(frame2,text="Notes",font=("Arial",notesTitleFontSize),background=frame4BgColor,foreground="white").pack(side='top')
-w = Weather(frame3,errorMsgLabel)
+try:
+    w = Weather(frame3,errorMsgLabel)
+except:
+    w = None
 if today.strftime("%A") =="Friday":
     Label(frame2,text="- Bid for house",font=("Arial",notesTextFontSize),background=frame2BgColor,foreground="white").pack()
 Label(frame4,text=today.strftime('%A, %d %B %Y'),font=("Arial",dateFontSize),background=frame4BgColor,foreground="white").pack(side="bottom")
