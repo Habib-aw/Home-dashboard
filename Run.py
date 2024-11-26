@@ -3,8 +3,14 @@ from datetime import datetime
 from Weather import Weather
 from Settings import frame1BgColor,frame2BgColor,frame3BgColor,frame4BgColor,today,frame1Span,maxColumnSpan,clockFontSize,dateFontSize,notesTextFontSize,notesTitleFontSize,frame1PadY,frame2PadY,frame3PadY,frame4PadY
 from Prayers import Prayers
+from cec import *
 import os
 import schedule
+from cec import *
+import time
+
+switch_hdmi(2)
+time.sleep(5)
 root= Tk()
 
 
