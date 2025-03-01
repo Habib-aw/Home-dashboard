@@ -10,7 +10,7 @@ class Ramadan:
         month = today.month
         self.hijri = Gregorian(int(datetime.now().year), month, day).to_hijri()
 
-        self.data = json.load(open("2024.json"))
+        self.data = json.load(open("2025.json"))
 
         self.todaySehri = self.data[month-1][day-1]['Fajr_start']
         self.todayIftaar = self.data[month-1][day-1]['Maghrib_start']
