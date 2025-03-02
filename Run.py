@@ -26,8 +26,7 @@ frame2.pack(ipady=frame2PadY,fill="x")
 frame4.pack(ipady=frame3PadY,side="bottom")
 frame3.pack(ipady=frame4PadY,side="bottom")
 
-
-
+Label(frame2,text="\n").pack(ipady=100)
 errorMsgLabel = Label(frame2,text="Error, no internet connection",font=("Arial",notesTextFontSize+10),background=frame2BgColor,foreground="red")
 r = Ramadan()
 dayFrame = Frame(frame2,background=frame2BgColor)
