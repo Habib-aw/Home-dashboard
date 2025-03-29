@@ -4,7 +4,6 @@ from Weather import Weather
 from Settings import frame1BgColor,frame2BgColor,frame3BgColor,frame4BgColor,today,frame1Span,maxColumnSpan,clockFontSize,dateFontSize,notesTextFontSize,notesTitleFontSize,frame1PadY,frame2PadY,frame3PadY,frame4PadY
 from Prayers import Prayers
 from cec import *
-from Ramadan import Ramadan
 import os
 import schedule
 from cec import *
@@ -22,47 +21,21 @@ frame4 = Frame(root,background=frame4BgColor)
 
 
 frame1.pack(ipady=frame1PadY)
-frame2.pack(ipady=frame2PadY,fill="x")
+frame2.pack(ipady=frame2PadY)
 frame4.pack(ipady=frame3PadY,side="bottom")
 frame3.pack(ipady=frame4PadY,side="bottom")
 
-Label(frame2,text="\n").pack(ipady=100)
+
+
 errorMsgLabel = Label(frame2,text="Error, no internet connection",font=("Arial",notesTextFontSize+10),background=frame2BgColor,foreground="red")
-r = Ramadan()
-dayFrame = Frame(frame2,background=frame2BgColor)
-sehriFrame = Frame(frame2,background=frame2BgColor)
-iftaarFrame=Frame(frame2,background=frame2BgColor)
-dayLabel = Label(dayFrame,text="Ramadan Day",font=("Arial",35),background=frame2BgColor,foreground="white")
-day = Label(dayFrame,text=r.getRamadanDay(),font=("Arial",80),background=frame2BgColor,foreground="white")
-
-sehriLabel = Label(sehriFrame,text="Sehri Ends",font=("Arial",35),background=frame2BgColor,foreground="white")
-sehri = Label(sehriFrame,text=r.todaySehri,font=("Arial",80),background=frame2BgColor,foreground="white")
-
-iftaarLabel = Label(iftaarFrame,text="Iftaar Starts",font=("Arial",35),background=frame2BgColor,foreground="white")
-iftaar = Label(iftaarFrame,text=r.todayIftaar,font=("Arial",80),background=frame2BgColor,foreground="white")
-
-
-dayLabel.pack()
-day.pack()
-sehriLabel.pack()
-sehri.pack()
-iftaarLabel.pack()
-iftaar.pack()
-
-dayFrame.pack(side="left",expand=True)
-sehriFrame.pack(side="left",expand=True)
-iftaarFrame.pack(side="right",expand=True)
-
-p = Prayers(frame1,r.tmrroSehri,sehri,r.tmrroIftaar,iftaar)
-# p = Prayers(frame1)
-# Label(frame2,text="Notes",font=("Arial",notesTitleFontSize),background=frame4BgColor,foreground="white").pack(side='top')
+p = Prayers(frame1)
+Label(frame2,text="Notes",font=("Arial",notesTitleFontSize),background=frame4BgColor,foreground="white").pack(side='top')
 try:
     w = Weather(frame3,errorMsgLabel)
 except:
     w = None
-
-# if today.strftime("%A") =="Friday":
-#     Label(frame2,text="- Bid for house",font=("Arial",notesTextFontSize),background=frame2BgColor,foreground="white").pack()
+if today.strftime("%A") =="Friday":
+    Label(frame2,text="- Bid for house",font=("Arial",notesTextFontSize),background=frame2BgColor,foreground="white").pack()
 Label(frame4,text=today.strftime('%A, %d %B %Y'),font=("Arial",dateFontSize),background=frame4BgColor,foreground="white").pack(side="bottom")
 clock = Label(frame4,text=today.strftime('%I:%M:%S %p'),font=("Arial",clockFontSize),background=frame4BgColor,foreground="white")
 clock.pack(side="bottom")
