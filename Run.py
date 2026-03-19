@@ -42,12 +42,12 @@ iftaarLabel = Label(iftaarFrame,text="Iftaar Starts",font=("Arial",35),backgroun
 iftaar = Label(iftaarFrame,text=r.todayIftaar,font=("Arial",80),background=frame2BgColor,foreground="white")
 
 
-dayLabel.pack()
-day.pack()
-sehriLabel.pack()
-sehri.pack()
-iftaarLabel.pack()
-iftaar.pack()
+# dayLabel.pack()
+# day.pack()
+# sehriLabel.pack()
+# sehri.pack()
+# iftaarLabel.pack()
+# iftaar.pack()
 
 # dayFrame.pack(side="left",expand=True)
 # sehriFrame.pack(side="left",expand=True)
