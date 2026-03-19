@@ -131,10 +131,10 @@ class Prayers:
             for i in range(len(self.prayerTimeObj)):
                 if (self.prayerTimeObj[i][0]<datetime.now()):
                     self.prayerLabels[i][0].config(background="green")
-                    if i == 0:
-                        self.sehriLabel.config(text=self.sehriText)
-                    if i == 3:
-                        self.iftaarLabel.config(text=self.iftaarText)
+                    # if i == 0:
+                    #     self.sehriLabel.config(text=self.sehriText)
+                    # if i == 3:
+                    #     self.iftaarLabel.config(text=self.iftaarText)
                 if (self.prayerTimeObj[i][1]<=datetime.now()):
                     self.prayerLabels[i][1].config(background="red")
                 if datetime.now()<=self.prayerTimeObj[i][1] and not setJamaah:

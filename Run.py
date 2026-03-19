@@ -49,9 +49,9 @@ sehri.pack()
 iftaarLabel.pack()
 iftaar.pack()
 
-dayFrame.pack(side="left",expand=True)
-sehriFrame.pack(side="left",expand=True)
-iftaarFrame.pack(side="right",expand=True)
+# dayFrame.pack(side="left",expand=True)
+# sehriFrame.pack(side="left",expand=True)
+# iftaarFrame.pack(side="right",expand=True)
 
 p = Prayers(frame1,r.tmrroSehri,sehri,r.tmrroIftaar,iftaar)
 # p = Prayers(frame1)
